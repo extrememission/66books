@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Fonts & Links</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Default font */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-container {
+            position: relative;
+            width: 200px;
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        .sidebar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #f1f1f1;
+            padding: 20px;
+            width: 200px;
+            height: 100vh;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        select {
+            font-size: 16px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar-container" onclick="toggleSidebar()">
+        <!-- Vertical bar icon here -->
+        <div class="sidebar" id="sidebar">
+            <h2>Links</h2>
+            <ul>
+                <li><a href="#" onclick="generateLoremIpsum()">Link 1 - Sample Text</a></li>
+                <li><a href="#" onclick="generateLoremIpsum()">Link 2 - Sample Text</a></li>
+                <li><a href="#" onclick="generateLoremIpsum()">Link 3 - Sample Text</a></li>
+                <!-- Add more links as needed -->
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        <h2>Select Font</h2>
+        <select id="fontSelector">
+            <!-- Fonts will be populated dynamically -->
+        </select>
+    </div>
+
+    <script>
+        const fontSelector = document.getElementById('fontSelector');
+
+        // Fetch all Google Fonts and populate the dropdown
+        fetch('https://www.googleapis.com/webfonts/v1/webfonts')
+        .then(response => response.json())
+        .then(data => {
+            const fonts = data.items.map(font => font.family);
+            fonts.forEach(font => {
+                const option = document.createElement('option');
+                option.value = font;
+                option.textContent = font;
+                fontSelector.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching fonts:', error);
+        });
+
+        document.getElementById('fontSelector').addEventListener('change', function() {
+            const selectedFont = this.value;
+            document.body.style.fontFamily = selectedFont;
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function generateLoremIpsum() {
+            const content = document.querySelector('.content');
+            content.innerHTML = ''; // Clear previous content
+
+            const paragraphs = [
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat est vel mauris tincidunt, non ultricies odio sagittis. Mauris sed eros vitae libero varius rutrum nec at ante.',
+                'Vestibulum nec velit ac eros consectetur fringilla. Nulla facilisi. Curabitur quis lorem nec ligula consequat ultricies sed eget justo. Integer ullamcorper, eros in tempor fermentum, felis ligula vestibulum felis, id scelerisque enim sapien nec risus.',
+                'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi nec enim justo. Sed tincidunt lorem nec felis consectetur, vel varius ante semper. Sed vel nisi in lorem malesuada placerat.'
+            ];
+
+            paragraphs.forEach(text => {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = text;
+                content.appendChild(paragraph);
+            });
+        }
+    </script>
+</body>
+</html>
