@@ -70,31 +70,18 @@
         </div>
     </div>
 
+    <select id="fontSelector" onchange="changeFont()">
+        <option value="Worker Sans">Worker Sans</option>
+        <option value="PT Sans Narrow">PT Sans Narrow</option>
+        <option value="Impact">Impact</option>
+    </select>
+
     <div class="content">
-        <h2>Select Font</h2>
-        <select id="fontSelector">
-            <!-- Fonts will be populated dynamically -->
-        </select>
+        <!-- Content will be generated dynamically -->
     </div>
 
     <script>
         const fontSelector = document.getElementById('fontSelector');
-
-        // Fetch all Google Fonts and populate the dropdown
-        fetch('https://www.googleapis.com/webfonts/v1/webfonts')
-        .then(response => response.json())
-        .then(data => {
-            const fonts = data.items.map(font => font.family);
-            fonts.forEach(font => {
-                const option = document.createElement('option');
-                option.value = font;
-                option.textContent = font;
-                fontSelector.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching fonts:', error);
-        });
 
         document.getElementById('fontSelector').addEventListener('change', function() {
             const selectedFont = this.value;
@@ -121,6 +108,11 @@
                 paragraph.textContent = text;
                 content.appendChild(paragraph);
             });
+        }
+
+        function changeFont() {
+            const selectedFont = fontSelector.value;
+            document.body.style.fontFamily = selectedFont;
         }
     </script>
 </body>
